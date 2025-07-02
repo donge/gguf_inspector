@@ -21,7 +21,7 @@ use std::io::{self, BufReader, Read, Seek};
 use std::path::PathBuf;
 
 // GGUF 相关的常量
-const GGUF_MAGIC: u32 = 0x47475546; // "GGUF" in ASCII
+const GGUF_MAGIC: u32 = 0x46554747; // "GGUF" in little-endian
 
 // GGUF 值类型的枚举
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -132,10 +132,11 @@ fn main() -> io::Result<()> {
 fn parse_gguf<R: Read + Seek>(reader: &mut R) -> io::Result<GGUFMeta> {
     // 1. 解析文件头
     let magic = reader.read_u32::<LittleEndian>()?;
+
     if magic != GGUF_MAGIC {
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
-            "不是有效的 GGUF 文件 (Magic number 不正确)",
+            format!("不是有效的 GGUF 文件 (Magic number 不正确). Expected: {:X}, Got: {:X}", GGUF_MAGIC, magic),
         ));
     }
     let header = GGUFHeader {
