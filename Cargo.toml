@@ -1,0 +1,17 @@
+[package]
+name = "gguf-inspector"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# 用于解析命令行参数
+clap = { version = "4.5.4", features = ["derive"] }
+
+# 用于处理二进制文件的字节序
+byteorder = "1.5.0"
+
+# 用于 JSON 输出
+serde = { version = "1.0.203", features = ["derive"] }
+serde_json = "1.0.117"
